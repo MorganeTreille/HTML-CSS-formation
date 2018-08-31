@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+	<link rel="stylesheet" href="normalize.css">
+	<link rel="stylesheet" type="text/css" href="index.css">
+	<title>Appli de ouf !</title>
+</head>
+<body>
+
+<section class="header">
+	<h1 class="sloggan">Noter, Garder, Partager !</h1>
+	<div name="zoneNote" class="zoneNote">
+		<div name="container" class="container">
+			<form name="add" class="add-box">
+				<button name="add-box__button" class="add-box__button" type="button" value="link">
+					<span class="add-box__icon add-box__icon--link">
+						<span class="add-box__image linkImg">
+							<img class="" src="link.svg">
+							<img class="plusImg" src="plus.svg">
+						</span>
+					</span>
+					<span class="add-box__label">URL</span>
+				</button>
+				<button name="add-box__button" class="add-box__button" type="button" value="photo">
+					<span class="add-box__icon add-box__icon--photo">
+						<span class="add-box__image photoImg">
+							<img class="" src="photo.svg">
+							<img class="plusImg" src="plus.svg">
+						</span>
+					</span>
+					<span class="add-box__label">Photo</span>
+				</button>
+				<button name="add-box__button" class="add-box__button" type="button" value="date">
+					<span class="add-box__icon add-box__icon--date">
+						<span class="add-box__image dateImg">
+							<img class="" src="date.svg">
+							<img class="plusImg" src="plus.svg">
+						</span>
+					</span>
+					<span class="add-box__label">Date</span>
+				</button>	
+				<button name="add-box__button" class="add-box__button" type="button" value="lieu">
+					<span class="add-box__icon add-box__icon--lieu">
+						<span class="add-box__image lieuImg">
+							<img class="" src="location.svg">
+							<img class="plusImg" src="plus.svg">
+						</span>
+					</span>
+					<span class="add-box__label">Lieu</span>
+				</button>
+			</form>
+			<form name="writeBox" class="write-box">
+				<textarea name="espaceNote" class="write-box__textarea" placeholder="Je me laisse une note ..."></textarea>
+				<div class="write-box__action">
+					<button class="write-box__button">Publier</button>
+				</div>
+			</form>
+		</div>
+	</div>
+</section>
+
+<section class="content">
+	<div class="container">
+		<div class="flow">
+		</div>
+	</div>
+	
+</section>
+
+<script>
+	var maxId = localStorage.getItem('maxId') || 0;
+	var messageIds = JSON.parse(localStorage.getItem('messageIds') || '[]');
+
+	messageIds.reverse().forEach(function (id) {
+		displayMessage(localStorage.getItem('message_' + id));
+	});
+
+	document.forms.writeBox.addEventListener('submit', function(event) {
+		event.preventDefault();
+		var message = document.forms.writeBox.espaceNote.value;
+		if(!message){
+			return;
+		}
+		var id = maxId++;
+		localStorage.setItem('maxId', maxId);
+		messageIds.push(id);
+		localStorage.setItem('messageIds', JSON.stringify(messageIds));
+		localStorage.setItem('message_' + id, message);
+		displayMessage(message, true);
+		clearForm();
+	});
+
+	function displayMessage (message, prepend) {
+		var flow = document.querySelector('.flow');
+		if (prepend) {
+			flow.innerHTML = messageToHtml(message) + '<br>' + flow.innerHTML;
+		} else {
+			flow.innerHTML += messageToHtml(message) + '<br>';
+		}
+	}
+
+	function messageToHtml(message) {
+		return '<div class = "message">' + 
+			'<div class = "message__box">' + 
+				'<div class = "message__content">' + message + '</div>' +
+			'</div>' +
+		'</div>';
+	}
+
+	function clearForm () {
+		document.forms.writeBox.espaceNote.value = '';
+	}
+	
+
+</script>
+
+</body>
+</html>

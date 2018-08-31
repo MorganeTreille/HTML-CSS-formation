@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="fr">
+<head>
+    <meta charset="utf-8">
+    <title>Share on twitter</title>
+    <link href="./normalize.css" rel="stylesheet"/>
+
+</head>
+<body>
+<div class="header">
+    <div class="container">
+        <h1>Partager sur twitter</h1>
+
+        <button>Partager en haut de l'article</button>
+        <button>Partager en bas de l'article</button>
+    </div>
+</div>
+<script>
+	// Query Module
+	var $$ = function(query) {
+		return Array.from(document.querySelectorAll(query));
+	}
+
+	//share Module
+	var shareConstructor = function(options) {
+		options.width = options.width || 640;
+		options.height = options.height || 400;
+
+		return function shareModule(query) {
+			var url = window.location;
+			
+			$$(query).forEach(function(trigger) {
+				trigger.addEventListener('click', function() {
+					window.open(
+						"http://twitter.com/?status=Je veux partager cette page : " + url,
+						"",
+						"width=" + options.width + ",height=" + options.height
+					);
+				});
+			});
+		};
+	}
+
+	//utilisation
+	var shareModule = shareConstructor({
+		height: 475
+	});
+	shareModule('button');
+    
+</script>
+</body>
+</html>
+
